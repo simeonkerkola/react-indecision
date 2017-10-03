@@ -2,6 +2,7 @@ node_modules/
 server.log
 access-key
 .eslintrc.js
+.eslintr.js
 
 ### Node ###
 
