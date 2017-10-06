@@ -3,8 +3,9 @@ class IndecisionApp extends React.Component {
     super(props)
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
     this.handlePick = this.handlePick.bind(this)
+    this.handleAddOption = this.handleAddOption.bind(this)
     this.state = {
-      options: ['Thing one', 'thing two', 'thing three']
+      options: []
     }
   }
   handleDeleteOptions() {
@@ -17,6 +18,21 @@ class IndecisionApp extends React.Component {
   handlePick() {
     const random = Math.floor(Math.random() * this.state.options.length)
     alert(this.state.options[random])
+  }
+  handleAddOption(newOption) {
+    if (!newOption) return 'Enter valid value to add item'
+
+    // returns the index where found, or -1 if not
+    else if (this.state.options.indexOf(newOption) > -1) {
+      return 'This option already exists'
+    }
+    this.setState((prevState) => {
+      return {
+        // We don't wanna directly manipulate the previous state
+        // arr.concat(arr2) merges 2 arrays, doesn't change the existing array, but returns a new one
+        options: prevState.options.concat(newOption)
+      }
+    })
   }
 
   render() {
@@ -34,7 +50,9 @@ class IndecisionApp extends React.Component {
           options={this.state.options}
           handleDeleteOptions={this.handleDeleteOptions}
         />
-        <AddOption />
+        <AddOption
+          handleAddOption={this.handleAddOption}
+        />
       </div>
     )
   }
@@ -97,16 +115,28 @@ class Action extends React.Component {
   }
 
   class AddOption extends React.Component {
+    constructor(props) {
+      super(props)
+      this.handleAddOption = this.handleAddOption.bind(this)
+      this.state = {
+        error: undefined
+      }
+    }
     handleAddOption(e) {
       e.preventDefault()
 
       const newOption = e.target.elements.newOption.value.trim()
-      if (newOption) alert(newOption)
+      const error = this.props.handleAddOption(newOption)
+
+      this.setState(() => {
+        return { error }
+      })
     }
     render() {
       return (
         <div>
           <label>Add new:</label>
+          {this.state.error && <p>{this.state.error}</p>}
           <form onSubmit={this.handleAddOption}>
             <input type="text" name="newOption"/>
             <button>Submit</button>
