@@ -58,60 +58,64 @@ class IndecisionApp extends React.Component {
   }
 }
 
-class Header extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>{this.props.title}</h1>
-        <h2>{this.props.subtitle}</h2>
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <h2>{props.subtitle}</h2>
+    </div>
+  )
+}
+
+const Action = (props) => {
+  return (
+    <div>
+      <button
+        onClick={props.handlePick}
+        disabled={!props.hasOptions}
+        >
+          What should I do?
+        </button>
       </div>
     )
   }
-}
 
-class Action extends React.Component {
-  render() {
-    return (
-      <div>
-        <button
-          onClick={this.props.handlePick}
-          disabled={!this.props.hasOptions}
-          >
-            What should I do?
-          </button>
-        </div>
-      )
-    }
-  }
+  // class Action extends React.Component {
+  //   render() {
+  //     return (
+  //       <div>
+  //         <button
+  //           onClick={this.props.handlePick}
+  //           disabled={!this.props.hasOptions}
+  //           >
+  //             What should I do?
+  //           </button>
+  //         </div>
+  //       )
+  //     }
+  //   }
 
   // Render new tag to each option
-
-  class Options extends React.Component {
-    render() {
-      // get props
-      const options = this.props.options
-      return (
-        <div>
-          <p>You have: {options.length} options</p>
-          <p>
-            <button onClick={this.props.handleDeleteOptions}>Remove All</button>
-          </p>
-          <label>Your options: </label>
-          {
-            options.map(option => <Option key={option} optionText={option} />)
-          }
-
-        </div>
-      )
-    }
+  const Options = (props) => {
+    const options = props.options
+    return (
+      <div>
+        <p>You have: {options.length} options</p>
+        <p>
+          <button onClick={props.handleDeleteOptions}>Remove All</button>
+        </p>
+        <label>Your options: </label>
+        {
+          options.map(option => <Option key={option} optionText={option} />)
+        }
+      </div>
+    )
   }
 
-  class Option extends React.Component {
-    render () {
-      return (
-        <p>{this.props.optionText}</p>
-      )
-    }
+  const Option = (props) => {
+    return (
+      <p>{props.optionText}</p>
+    )
   }
 
   class AddOption extends React.Component {
@@ -146,5 +150,14 @@ class Action extends React.Component {
     }
   }
 
+  // Stateless Functional Component
+  // const User = (props) => {
+  //   return (
+  //     <div>
+  //       <p>Name: {props.name}</p>
+  //       <p>Age: {props.age}</p>
+  //     </div>
+  //   )
+  // }
 
   ReactDOM.render(<IndecisionApp />, document.getElementById('app'))
