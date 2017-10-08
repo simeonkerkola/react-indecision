@@ -28,6 +28,42 @@ var IndecisionApp = function (_React$Component) {
   }
 
   _createClass(IndecisionApp, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      try {
+        var json = localStorage.getItem('options');
+        var options = JSON.parse(json);
+
+        // Set state only if there is any options
+        if (options) {
+          this.setState(function () {
+            return { options: options };
+          });
+          console.log('fetching data');
+        }
+      } catch (e) {
+        // If json data is not valid, do nothing
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      // Only save if options array changes
+      if (prevState.options.length !== this.state.options.length) {
+        var json = JSON.stringify(this.state.options);
+        localStorage.setItem('options', json);
+        console.log('saving data');
+      }
+    }
+
+    // Fires just before component goes away (user switches a page)
+
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      console.log('componentWillUnmount');
+    }
+  }, {
     key: 'handleDeleteOptions',
     value: function handleDeleteOptions() {
       // ({ this is an arrow function returning an object })
@@ -98,7 +134,7 @@ var IndecisionApp = function (_React$Component) {
 }(React.Component);
 
 IndecisionApp.defaultProps = {
-  options: ['hi', 'hy']
+  options: []
 };
 
 var Header = function Header(props) {
@@ -159,25 +195,19 @@ var Options = function Options(props) {
     'div',
     null,
     React.createElement(
-      'p',
-      null,
-      'You have: ',
-      options.length,
-      ' options'
+      'button',
+      { onClick: props.handleDeleteOptions },
+      'Remove All'
     ),
-    React.createElement(
-      'p',
-      null,
-      React.createElement(
-        'button',
-        { onClick: props.handleDeleteOptions },
-        'Remove All'
-      )
-    ),
-    React.createElement(
+    React.createElement('br', null),
+    options.length ? React.createElement(
       'label',
       null,
       'Your options: '
+    ) : React.createElement(
+      'label',
+      null,
+      'No options yet'
     ),
     options.map(function (option) {
       return React.createElement(Option, {
@@ -232,6 +262,9 @@ var AddOption = function (_React$Component2) {
       this.setState(function () {
         return { error: error };
       });
+
+      // If no error, whipe the input
+      if (!error) e.target.elements.newOption.value = '';
     }
   }, {
     key: 'render',

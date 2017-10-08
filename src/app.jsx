@@ -9,6 +9,35 @@ class IndecisionApp extends React.Component {
       options: props.options
     }
   }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('options')
+      const options = JSON.parse(json)
+
+      // Set state only if there is any options
+      if (options) {
+        this.setState(() => ({ options }))
+        console.log('fetching data')
+      }
+    } catch (e) {
+      // If json data is not valid, do nothing
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    // Only save if options array changes
+    if(prevState.options.length !== this.state.options.length) {
+      const json = JSON.stringify(this.state.options)
+      localStorage.setItem('options', json)
+      console.log('saving data');
+    }
+
+  }
+
+  // Fires just before component goes away (user switches a page)
+  componentWillUnmount() {
+    console.log('componentWillUnmount')
+  }
   handleDeleteOptions() {
     // ({ this is an arrow function returning an object })
     this.setState(() => ({ options: [] }))
@@ -60,7 +89,7 @@ class IndecisionApp extends React.Component {
 }
 
 IndecisionApp.defaultProps = {
-  options: ['hi', 'hy']
+  options: []
 }
 
 const Header = (props) => {
@@ -109,11 +138,10 @@ const Action = (props) => {
     const options = props.options
     return (
       <div>
-        <p>You have: {options.length} options</p>
-        <p>
-          <button onClick={props.handleDeleteOptions}>Remove All</button>
-        </p>
-        <label>Your options: </label>
+        {/* <p>You have: {options.length} options</p> */}
+        <button onClick={props.handleDeleteOptions}>Remove All</button>
+        <br/>
+        {options.length ? <label>Your options: </label> : <label>No options yet</label>}
         {
           options.map(option => (
             <Option
@@ -157,6 +185,9 @@ const Action = (props) => {
         const error = this.props.handleAddOption(newOption)
 
         this.setState(() => ({ error }))
+
+        // If no error, whipe the input
+        if(!error) e.target.elements.newOption.value = ''
       }
       render() {
         return (
