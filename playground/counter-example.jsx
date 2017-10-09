@@ -5,9 +5,27 @@ class Counter extends React.Component {
     this.handleMinusOne = this.handleMinusOne.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.state = {
-      count: props.count
+      count: 0
     }
   }
+
+  componentDidMount() {
+    const saved = parseInt(localStorage.getItem('count'), 10)
+
+    // If try to parseInt "abc", it returns NaN
+    if (!isNaN(saved)) {
+      this.setState(() => ({ count: saved }))
+      console.log(saved);
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.count !== this.state.count) {
+      const saved = this.state.count
+      console.log('saving data');
+      localStorage.setItem('count', saved)
+    }
+  }
+
   handleAddOne() {
     // allows to manipulate the state object, re-renders automaticaly
     this.setState((prevState) => { // prevState can access to the current state values (this.state)
@@ -46,9 +64,9 @@ class Counter extends React.Component {
   }
 }
 
-Counter.defaultProps = {
-  count: 0
-}
+// Counter.defaultProps = {
+//   count: 0
+// }
 
 ReactDOM.render(<Counter />, document.getElementById('app'))
 
