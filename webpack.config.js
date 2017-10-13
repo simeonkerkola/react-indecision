@@ -12,5 +12,9 @@ module.exports = {
       test: /\.jsx$/, // look for all *.jsx files
       exclude: /node_modules/,
     }]
+  },
+  devtool: 'cheap-module-eval-source-map', // implement sourcemap
+  devServer: {
+    contentBase: path.join(__dirname, 'public'), // watch public folder
   }
 };
