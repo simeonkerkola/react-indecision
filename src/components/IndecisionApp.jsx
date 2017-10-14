@@ -4,6 +4,7 @@ import AddOption from './AddOption.jsx'
 import Options from './Options.jsx'
 import Header from './Header.jsx'
 import Action from './Action.jsx'
+import OptionModal from './OptionModal.jsx'
 
 export default class IndecisionApp extends React.Component {
   // constructor(props) { // constructor gets called w/ props object (same as this.props in render method)
@@ -15,7 +16,8 @@ export default class IndecisionApp extends React.Component {
   // }
 
   state = {
-    options: []
+    options: [],
+    selectedOption: undefined
   }
   handleDeleteOptions = () => {
     // ({ this is an arrow function returning an object })
@@ -28,7 +30,8 @@ export default class IndecisionApp extends React.Component {
   }
   handlePick = () => {
     const random = Math.floor(Math.random() * this.state.options.length)
-    alert(this.state.options[random])
+    const option = this.state.options[random]
+    this.setState(() => ({selectedOption: option}) )
   }
   handleAddOption = (newOption) => {
     if (!newOption) return 'Enter valid value to add item'
@@ -41,6 +44,9 @@ export default class IndecisionApp extends React.Component {
     // We don't wanna directly manipulate the previous state
     // arr.concat(arr2) merges 2 arrays, doesn't change the existing array, but returns a new one
     this.setState((prevState) => ({ options: prevState.options.concat(newOption) }))
+  }
+  handleClearSelectedOption = () => {
+    this.setState(() => ({selectedOption: undefined}))
   }
 
   componentDidMount() {
@@ -88,6 +94,10 @@ export default class IndecisionApp extends React.Component {
         />
         <AddOption
           handleAddOption={this.handleAddOption}
+        />
+        <OptionModal
+          selectedOption={this.state.selectedOption}
+          handleClearSelectedOption={this.handleClearSelectedOption}
         />
       </div>
     )
