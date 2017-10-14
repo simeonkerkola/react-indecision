@@ -6,15 +6,41 @@ import Header from './Header.jsx'
 import Action from './Action.jsx'
 
 export default class IndecisionApp extends React.Component {
-  constructor(props) { // constructor gets called w/ props object (same as this.props in render method)
-    super(props)
-    this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
-    this.handleDeleteOption = this.handleDeleteOption.bind(this)
-    this.handlePick = this.handlePick.bind(this)
-    this.handleAddOption = this.handleAddOption.bind(this)
-    this.state = {
-      options: []
+  // constructor(props) { // constructor gets called w/ props object (same as this.props in render method)
+  //   super(props)
+  //   this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
+  //   this.handleDeleteOption = this.handleDeleteOption.bind(this)
+  //   this.handlePick = this.handlePick.bind(this)
+  //   this.handleAddOption = this.handleAddOption.bind(this)
+  // }
+
+  state = {
+    options: []
+  }
+  handleDeleteOptions = () => {
+    // ({ this is an arrow function returning an object })
+    this.setState(() => ({ options: [] }))
+  }
+  handleDeleteOption = (optionToRemove) => {
+    this.setState((prevState) => ({
+      options: prevState.options.filter(option => optionToRemove !== option)
+    }))
+  }
+  handlePick = () => {
+    const random = Math.floor(Math.random() * this.state.options.length)
+    alert(this.state.options[random])
+  }
+  handleAddOption = (newOption) => {
+    if (!newOption) return 'Enter valid value to add item'
+
+    // returns the index where found, or -1 if not
+    else if (this.state.options.indexOf(newOption) > -1) {
+      return 'This option already exists'
     }
+
+    // We don't wanna directly manipulate the previous state
+    // arr.concat(arr2) merges 2 arrays, doesn't change the existing array, but returns a new one
+    this.setState((prevState) => ({ options: prevState.options.concat(newOption) }))
   }
 
   componentDidMount() {
@@ -42,32 +68,6 @@ export default class IndecisionApp extends React.Component {
   // Fires just before component goes away (user switches a page)
   componentWillUnmount() {
     console.log('componentWillUnmount')
-  }
-
-  handleDeleteOptions() {
-    // ({ this is an arrow function returning an object })
-    this.setState(() => ({ options: [] }))
-  }
-  handleDeleteOption(optionToRemove) {
-    this.setState((prevState) => ({
-      options: prevState.options.filter(option => optionToRemove !== option)
-    }))
-  }
-  handlePick() {
-    const random = Math.floor(Math.random() * this.state.options.length)
-    alert(this.state.options[random])
-  }
-  handleAddOption(newOption) {
-    if (!newOption) return 'Enter valid value to add item'
-
-    // returns the index where found, or -1 if not
-    else if (this.state.options.indexOf(newOption) > -1) {
-      return 'This option already exists'
-    }
-
-    // We don't wanna directly manipulate the previous state
-    // arr.concat(arr2) merges 2 arrays, doesn't change the existing array, but returns a new one
-    this.setState((prevState) => ({ options: prevState.options.concat(newOption) }))
   }
 
   render() {
