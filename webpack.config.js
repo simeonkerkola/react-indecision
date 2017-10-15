@@ -12,7 +12,7 @@ module.exports = {
       test: /\.jsx$/, // look for all *.jsx files
       exclude: /node_modules/,
     },{
-      test: /\.scss$/,
+      test: /\.s?css$/,
       use: [ // use allows us to use an array of loaders
         'style-loader',
         'css-loader',
