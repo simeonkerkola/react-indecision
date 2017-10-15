@@ -8,9 +8,16 @@ module.exports = {
   },
   module: {
     rules: [{
-      loader: 'babel-loader', // use babeö
+      loader: 'babel-loader', // use babel
       test: /\.jsx$/, // look for all *.jsx files
       exclude: /node_modules/,
+    },{
+      test: /\.scss$/,
+      use: [ // use allows us to use an array of loaders
+        'style-loader',
+        'css-loader',
+        'sass-loader'
+      ]
     }]
   },
   devtool: 'cheap-module-eval-source-map', // implement sourcemap
