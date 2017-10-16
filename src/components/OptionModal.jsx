@@ -7,10 +7,13 @@ const OptionModal = (props) => (
     isOpen={!!props.selectedOption} // !! converts string to true, and undef to false
     onRequestClose={props.handleClearSelectedOption} // close the modal w/ esc
     contentLabel="Selected Option"
+    closeTimeoutMS={200}
+    className="modal"
     >
-    <h3>Selected Option</h3>
-    <p>{props.selectedOption}</p>
+    <h3 className="modal__title">Selected Option</h3>
+    <p className="modal__body">{props.selectedOption}</p>
     <button
+      className="button"
       onClick={props.handleClearSelectedOption}
       >
         Okay
