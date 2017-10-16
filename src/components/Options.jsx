@@ -5,23 +5,27 @@ import Option from './Option.jsx'
 const Options = (props) => (
   <div>
     {/* <p>You have: {options.length} options</p> */}
-    <button
-      className="button button--link"
-      onClick={props.handleDeleteOptions}
-      >
-        Remove All
-      </button>
-      <br/>
-      {props.options.length ? <label>Your options: </label> : <label>No options yet</label>}
+    <div className="widget-header">
+      <h3 className="widget-header__title">Your Options</h3>
+      <button
+        className="button button--link"
+        onClick={props.handleDeleteOptions}
+        >
+          Remove All
+        </button>
+      </div>
+      {!props.options.length && <p className="widget__message">No options yet</p>}
       {
-        props.options.map(option => (
+        props.options.map((option, index) => (
           <Option
-            key={option} optionText={option}
+            key={option}
+            optionText={option}
+            count={index + 1}
             handleDeleteOption={props.handleDeleteOption}
           />
         ))
-      }
-    </div>
-  )
+    }
+  </div>
+)
 
-  export default Options
+export default Options
